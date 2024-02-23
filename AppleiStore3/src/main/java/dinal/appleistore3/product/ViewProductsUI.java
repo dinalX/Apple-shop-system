@@ -1,0 +1,346 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
+ */
+package dinal.appleistore3.product;
+
+import dinal.appleistore3.CSVHandler;
+import LoginSystem.LoginFormUI;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.RowFilter;
+import javax.swing.RowFilter.Entry;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
+
+/**
+ *
+ * @author dnlx
+ */
+public class ViewProductsUI extends javax.swing.JFrame {
+
+    /**
+     * Creates new form ViewProducts
+     *
+     * @throws java.io.FileNotFoundException
+     */
+    public ViewProductsUI() throws FileNotFoundException {
+        initComponents();
+
+        ArrayList<String> products = CSVHandler.read("./product.csv");
+        DefaultTableModel tblModel = (DefaultTableModel) productTable.getModel();
+        tblModel.setRowCount(0);
+        for (String product : products) {
+            String[] productData = product.split(",");
+            tblModel.addRow(productData);
+        }
+
+        //Search by name
+        TableRowSorter sorter = new TableRowSorter(tblModel);
+        productTable.setRowSorter(sorter);
+
+        nameFilterTF.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                //    throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+                tblModel.fireTableDataChanged();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                //   throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+                tblModel.fireTableDataChanged();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                //   throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+                tblModel.fireTableDataChanged();
+            }
+
+        });
+
+        sorter.setRowFilter(new RowFilter() {
+            @Override
+            public boolean include(Entry entry) {
+                String fProductName = entry.getValue(2).toString();
+
+                String searchText = nameFilterTF.getText();
+
+                return fProductName.contains(searchText);
+            }
+
+        });
+
+        //short by combo box
+        String category = categoryFilterCB.getSelectedItem().toString();
+        switch (category) {
+//Select, Apple_iPhone, Apple_Macbook, Apple_AirPods, Apple_Watch, Apple_MacMini, Apple_Speacker
+//Select,Apple_iPhone,Apple_Macbook,Apple_AirPods,Apple_Watch,Apple_MacMini,Apple_Speacker
+            case "Select":
+                break;
+            case "Apple_iPhone":
+                // code block
+                nameFilterTF.setText("");
+                System.out.println("Apple_iPhone");
+                sorter.setRowFilter(new RowFilter() {
+                    @Override
+                    public boolean include(Entry entry) {
+                        String fProductName = entry.getValue(3).toString();
+                        String FilterCB = categoryFilterCB.getSelectedItem().toString();
+                        return fProductName.contains(FilterCB);
+                    }
+                });
+
+                break;
+
+            case "Apple_Macbook":
+                // code block
+                System.out.println("Apple_Macbook");
+                break;
+            case "Apple_AirPods":
+                // code block
+                System.out.println("Apple_AirPods");
+                break;
+            case "Apple_Watch":
+                // code block
+                System.out.println("Apple_Watch");
+                break;
+            case "Apple_MacMini":
+                // code block
+                System.out.println("Apple_MacMini");
+                break;
+            case "Apple_Speacker":
+                // code block
+                System.out.println("Apple_Speacker");
+                break;
+            default:
+                // code block
+                System.out.println("This featuer under developing");
+        }
+    }
+
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
+     */
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+
+        jInternalFrame1 = new javax.swing.JInternalFrame();
+        jLabel6 = new javax.swing.JLabel();
+        closeBT = new javax.swing.JButton();
+        jLabel7 = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        productTable = new javax.swing.JTable();
+        nameFilterTF = new javax.swing.JTextField();
+        categoryFilterCB = new javax.swing.JComboBox<>();
+
+        jInternalFrame1.setVisible(true);
+
+        javax.swing.GroupLayout jInternalFrame1Layout = new javax.swing.GroupLayout(jInternalFrame1.getContentPane());
+        jInternalFrame1.getContentPane().setLayout(jInternalFrame1Layout);
+        jInternalFrame1Layout.setHorizontalGroup(
+            jInternalFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 394, Short.MAX_VALUE)
+        );
+        jInternalFrame1Layout.setVerticalGroup(
+            jInternalFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 308, Short.MAX_VALUE)
+        );
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setLocation(new java.awt.Point(100, 100));
+        setResizable(false);
+
+        jLabel6.setFont(new java.awt.Font("Segoe UI", 1, 36)); // NOI18N
+        jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jLabel6.setText("View Products");
+        jLabel6.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+
+        closeBT.setBackground(new java.awt.Color(255, 204, 204));
+        closeBT.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        closeBT.setText("Close");
+        closeBT.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                closeBTActionPerformed(evt);
+            }
+        });
+
+        jLabel7.setText("@dinalHasantha");
+
+        productTable.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        productTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "ID", "ProductID", "Name", "Category", "Quantity", "Price"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        productTable.setRowHeight(22);
+        productTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                productTableMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(productTable);
+        if (productTable.getColumnModel().getColumnCount() > 0) {
+            productTable.getColumnModel().getColumn(0).setPreferredWidth(2);
+            productTable.getColumnModel().getColumn(1).setPreferredWidth(2);
+            productTable.getColumnModel().getColumn(2).setPreferredWidth(10);
+            productTable.getColumnModel().getColumn(3).setPreferredWidth(3);
+            productTable.getColumnModel().getColumn(4).setPreferredWidth(2);
+            productTable.getColumnModel().getColumn(5).setPreferredWidth(2);
+        }
+
+        nameFilterTF.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+
+        categoryFilterCB.setBackground(new java.awt.Color(255, 255, 204));
+        categoryFilterCB.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        categoryFilterCB.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Select", "Apple_iPhone", "Apple_Macbook", "Apple_AirPods", "Apple_Watch", "Apple_MacMini", "Apple_Speacker" }));
+        categoryFilterCB.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                categoryFilterCBItemStateChanged(evt);
+            }
+        });
+        categoryFilterCB.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                categoryFilterCBActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(30, 30, 30)
+                        .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 587, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(344, 344, 344)
+                        .addComponent(closeBT))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(20, 20, 20)
+                        .addComponent(nameFilterTF, javax.swing.GroupLayout.PREFERRED_SIZE, 380, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(270, 270, 270)
+                        .addComponent(categoryFilterCB, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(16, 16, 16)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1030, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(967, 967, 967)
+                        .addComponent(jLabel7)))
+                .addContainerGap(10, Short.MAX_VALUE))
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(19, 19, 19)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(1, 1, 1)
+                        .addComponent(jLabel6))
+                    .addComponent(closeBT))
+                .addGap(22, 22, 22)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(nameFilterTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(categoryFilterCB, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(11, 11, 11)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 473, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jLabel7))
+        );
+
+        pack();
+    }// </editor-fold>//GEN-END:initComponents
+
+    private void closeBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_closeBTActionPerformed
+        // TODO add your handling code here:
+        LoginFormUI loginForm = new LoginFormUI();
+        loginForm.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_closeBTActionPerformed
+
+    private void productTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_productTableMouseClicked
+
+    }//GEN-LAST:event_productTableMouseClicked
+
+    private void categoryFilterCBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_categoryFilterCBActionPerformed
+        // TODO add your handling code here:
+        String category = categoryFilterCB.getSelectedItem().toString();
+
+    }//GEN-LAST:event_categoryFilterCBActionPerformed
+
+    private void categoryFilterCBItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_categoryFilterCBItemStateChanged
+        // TODO add your handling code here:
+    }//GEN-LAST:event_categoryFilterCBItemStateChanged
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String args[]) {
+        /* Set the Nimbus look and feel */
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         */
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(ViewProductsUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(ViewProductsUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(ViewProductsUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(ViewProductsUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        //</editor-fold>
+        //</editor-fold>
+
+        /* Create and display the form */
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                try {
+                    new ViewProductsUI().setVisible(true);
+                } catch (FileNotFoundException ex) {
+                    Logger.getLogger(ViewProductsUI.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        });
+    }
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    protected javax.swing.JComboBox<String> categoryFilterCB;
+    private javax.swing.JButton closeBT;
+    private javax.swing.JInternalFrame jInternalFrame1;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTextField nameFilterTF;
+    private javax.swing.JTable productTable;
+    // End of variables declaration//GEN-END:variables
+}
